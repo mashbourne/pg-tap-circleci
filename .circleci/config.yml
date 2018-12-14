@@ -31,11 +31,10 @@ jobs:
       - run:
           name: Run tests
           command: |
-            docker run -i -t --rm \
-              --name pgtap \
-              --link postgres:db \
+            docker run -i -t --rm --name pgtap walm/pgtap \
               -v /test/:/test \
-              hbpmip/pgtap:0.96.0-5
+              -h $PGHOST -u $PGUSER -d db \
+              -t '/test/*.sql'
 
       - store_artifacts:
           path: /tmp/test-results
