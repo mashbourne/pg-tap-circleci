@@ -19,31 +19,21 @@ jobs:
           command: sudo apt-get update && sudo apt-get install -y postgresql-client
       
       - run:
-          name: Waiting for Postgres to be ready
-          command: dockerize -wait tcp://localhost:5432 -timeout 1m
-
-      - run: mkdir -p /tmp/test-results
-
-      - run: cat db-init.sql | psql $POSTGRES_DB
-      
-      - run:
-          name: Setup pgTAP
+          name: Get pgTAP
           command: |
             sudo apt-get install parallel libgetopt-declare-perl \
             && echo yes | sudo cpan App::cpanminus \
             && echo yes | sudo cpan TAP::Parser::SourceHandler::pgTAP
-
       - run:
           name: Check pgTAP install
           command: perl -MTAP::Parser::SourceHandler::pgTAP -e 'print;'
-
+      
+      - run:
+          name: Waiting for Postgres to be ready
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run: cat db-init.sql | psql $POSTGRES_DB
+      - run: CREATE EXTENSION IF NOT EXISTS pgtap; | psql $POSTGRES_DB
+      
       - run:
           name: Run tests
           command: pg_prove --recurse test/
-
-      - store_artifacts:
-          path: /tmp/test-results
-          destination: raw-test-output
-
-      - store_test_results:
-          path: /tmp/test-results
