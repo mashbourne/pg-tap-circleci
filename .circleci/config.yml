@@ -32,7 +32,7 @@ jobs:
           command: |
             sudo apt-get install parallel libgetopt-declare-perl \
             && cpan App::cpanminus \
-            && sudo cpan TAP::Parser::SourceHandler::pgTAP
+            && yes | sudo cpan TAP::Parser::SourceHandler::pgTAP
 
       - run:
           name: Check pgTAP install
