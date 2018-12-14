@@ -31,7 +31,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-            docker run -i -t --rm -v /test/:/test lren/pgtap \
+            docker run -i -t -v /test/:/test lren/pgtap \
               -h $PGHOST -u $PGUSER -d db -e PASSWORD=$POSTGRES_PASSWORD \
               -t '/test/*.sql'
 
