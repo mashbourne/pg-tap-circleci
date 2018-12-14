@@ -5,10 +5,7 @@ jobs:
       - image: circleci/openjdk:8-jdk
         environment:
           PGHOST: 127.0.0.1
-          __PGUSER: postgres
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ""
-          POSTGRES_DB: postgres
+          PGUSER: postgres
       - image: circleci/postgres:9.6-alpine
         environment:
           POSTGRES_USER: postgres
@@ -41,7 +38,7 @@ jobs:
 
       - run:
           name: Run tests
-          command: pg_prove --host $PGHOST --dbname $POSTGRES_DB --username $POSTGRES_USER --port 5432 test/**/*.sql
+          command: pg_prove --host localhost --dbname postgres --username postgres --password "" --port 5432 test/**/*.sql
 
       - store_artifacts:
           path: /tmp/test-results
