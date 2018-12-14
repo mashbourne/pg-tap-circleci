@@ -1,5 +1,5 @@
 BEGIN;
   SELECT plan(2);
-  SELECT ok(add(1, 2) = 3, 'add 1 + 2');
-  SELECT ok(add(1, 2) = 4, 'add 1 + 2');
+  SELECT ok(add(1, 2) = 3, 'add 1 + 2; expect 3');
+  SELECT ok(add(1, 2) = 4, 'add 1 + 2; expect 4 (it will fail)');
 ROLLBACK;
