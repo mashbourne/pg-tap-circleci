@@ -31,8 +31,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-            docker run -i -t --rm --name pgtap walm/pgtap \
-              -v /test/:/test \
+            docker run -t --rm -v /test/:/test walm/pgtap \
               -h $PGHOST -u $PGUSER -d db \
               -t '/test/*.sql'
 
