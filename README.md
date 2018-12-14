@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/mashbourne/pg-tap-circleci.svg?style=svg)](https://circleci.com/gh/mashbourne/pg-tap-circleci)
+
 # test-postgres
 circleci based build that sets up a Postgres database, and runs pgTAP database unit tests
 
