@@ -27,13 +27,17 @@ jobs:
       - setup_remote_docker
 
       - run: cat db-init.sql | psql db
+      
+      - run:
+          name: Setup pgTAP
+          command: |
+            sudo apt-get install parallel libgetopt-declare-perl
+            && cpan App::cpanminus \
+            && sudo cpan TAP::Parser::SourceHandler::pgTAP
 
       - run:
-          name: Run tests
-          command: |
-            docker run -i -t -v /test/:/test lren/pgtap \
-              -h $PGHOST -u $PGUSER -d db -e PASSWORD=$POSTGRES_PASSWORD \
-              -t '/test/*.sql'
+          name: Check pgTAP install
+          command: perl -MTAP::Parser::SourceHandler::pgTAP -e 'print;'
 
       - store_artifacts:
           path: /tmp/test-results
