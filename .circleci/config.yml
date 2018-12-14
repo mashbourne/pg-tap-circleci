@@ -41,7 +41,7 @@ jobs:
 
       - run:
           name: Run tests
-          command: pg_prove --host $PGHOST --dbname $POSTGRES_DB --username $POSTGRES_USER --port 5432 tests/**/*.sql
+          command: pg_prove --host $PGHOST --dbname $POSTGRES_DB --username $POSTGRES_USER --port 5432 test/**/*.sql
 
       - store_artifacts:
           path: /tmp/test-results
