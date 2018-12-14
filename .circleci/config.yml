@@ -39,7 +39,7 @@ jobs:
 
       - run:
           name: Run tests
-          command: pg_prove test/**/*.sql
+          command: pg_prove --recurse test/
 
       - store_artifacts:
           path: /tmp/test-results
