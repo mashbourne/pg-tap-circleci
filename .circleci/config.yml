@@ -31,8 +31,8 @@ jobs:
       - run:
           name: Run tests
           command: |
-            docker run -p -t --rm -v /test/:/test lren/pgtap \
-              -h $PGHOST -u $PGUSER -d db \
+            docker run -i -t --rm -v /test/:/test lren/pgtap \
+              -h $PGHOST -u $PGUSER -d db -e PASSWORD=$POSTGRES_PASSWORD \
               -t '/test/*.sql'
 
       - store_artifacts:
