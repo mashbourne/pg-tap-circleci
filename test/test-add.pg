@@ -1,5 +1,6 @@
 BEGIN;
   SELECT plan(2);
-  SELECT ok(add(1, 2) = 3, 'add 1 + 2; expect 3');
-  SELECT ok(add(1, 2) = 4, 'add 1 + 2; expect 4 (it will fail)');
+  SELECT ok(add(1, 2) = 3, 'expect 1 + 2 = 3 is true');
+  SELECT is(add(1, 2), 3, '1 + 2 is 3');
+  SELECT isnt(add(1, 2), -1, '1 + 2 is not -1');
 ROLLBACK;
