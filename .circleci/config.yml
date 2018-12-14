@@ -1,0 +1,45 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: postgres:9.4.1
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: db
+          TESTS: /test/*.sql -v
+
+    steps:
+      - checkout
+      
+      - run:
+          name: Waiting for Postgres to be ready
+          command: |
+            for i in `seq 1 10`;
+            do
+              nc -z localhost 5432 && echo Success && exit 0
+              echo -n .
+              sleep 1
+            done
+            echo Failed waiting for Postgress && exit 1
+
+      - run: mkdir -p /tmp/test-results
+
+      - setup_remote_docker
+
+      - run: cat create.sql | psql db
+
+      - run:
+          name: Run tests
+          command: |
+            docker run -i -t --rm \
+              --name pgtap \
+              --link postgres:db \
+              -v /test/:/test \
+              hbpmip/pgtap:0.96.0-5
+
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: raw-test-output
+
+      - store_test_results:
+          path: /tmp/test-results
