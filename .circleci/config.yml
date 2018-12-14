@@ -10,8 +10,7 @@ jobs:
         environment:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: ""
-          POSTGRES_DB: db
-          TESTS: /test/*.sql -v
+          POSTGRES_DB: postgres
     steps:
       - checkout
       - run: 
@@ -31,13 +30,17 @@ jobs:
       - run:
           name: Setup pgTAP
           command: |
-            sudo apt-get install parallel libgetopt-declare-perl
+            sudo apt-get install parallel libgetopt-declare-perl \
             && cpan App::cpanminus \
             && sudo cpan TAP::Parser::SourceHandler::pgTAP
 
       - run:
           name: Check pgTAP install
           command: perl -MTAP::Parser::SourceHandler::pgTAP -e 'print;'
+
+      - run:
+          name: Run tests
+          command: pg_prove --host localhost --dbname postgres --username postgres --port 5432 tests/**/*.sql
 
       - store_artifacts:
           path: /tmp/test-results
