@@ -32,7 +32,7 @@ jobs:
           name: Waiting for Postgres to be ready
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run: cat db-init.sql | psql $POSTGRES_DB
-      - run: CREATE EXTENSION IF NOT EXISTS pgtap; | psql $POSTGRES_DB
+      - run: echo "CREATE EXTENSION IF NOT EXISTS pgtap;" | psql $POSTGRES_DB
       
       - run:
           name: Run tests
