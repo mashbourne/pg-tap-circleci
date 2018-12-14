@@ -1,20 +1,42 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/myapp
     docker:
-      - image: circleci/ruby:2.3-node
+      - image: circleci/openjdk:8-jdk
         environment:
           PGHOST: 127.0.0.1
-          PGUSER: myapp-test
-      - image: circleci/postgres:9.5-alpine
+          PGUSER: postgres
+      - image: circleci/postgres:9.6-alpine
         environment:
-          POSTGRES_USER: myapp
-          POSTGRES_DB: myapp-test
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: ""
+          POSTGRES_DB: db
+          TESTS: /test/*.sql -v
     steps:
       - checkout
+      
+      - run:
+          name: Waiting for Postgres to be ready
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+
+      - run: mkdir -p /tmp/test-results
+
+      - setup_remote_docker
+
+      - run: cat create.sql | psql db
 
       - run:
-          name: Wait for DB
-          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+          name: Run tests
+          command: |
+            docker run -i -t --rm \
+              --name pgtap \
+              --link postgres:db \
+              -v /test/:/test \
+              hbpmip/pgtap:0.96.0-5
+
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: raw-test-output
+
+      - store_test_results:
+          path: /tmp/test-results
