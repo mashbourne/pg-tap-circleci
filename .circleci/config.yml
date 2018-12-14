@@ -23,8 +23,6 @@ jobs:
 
       - run: mkdir -p /tmp/test-results
 
-      - setup_remote_docker
-
       - run: cat db-init.sql | psql $POSTGRES_DB
       
       - run:
@@ -32,7 +30,7 @@ jobs:
           command: |
             sudo apt-get install parallel libgetopt-declare-perl \
             && cpan App::cpanminus \
-            && yes | sudo cpan TAP::Parser::SourceHandler::pgTAP
+            && echo yes | sudo cpan TAP::Parser::SourceHandler::pgTAP
 
       - run:
           name: Check pgTAP install
