@@ -23,7 +23,7 @@ jobs:
 
       - setup_remote_docker
 
-      - run: cat create.sql | psql db
+      - run: cat db-init.sql | psql db
 
       - run:
           name: Run tests
