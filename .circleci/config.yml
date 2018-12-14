@@ -25,7 +25,7 @@ jobs:
 
       - setup_remote_docker
 
-      - run: cat db-init.sql | psql db
+      - run: cat db-init.sql | psql $POSTGRES_DB
       
       - run:
           name: Setup pgTAP
@@ -40,7 +40,7 @@ jobs:
 
       - run:
           name: Run tests
-          command: pg_prove --host localhost --dbname postgres --username postgres --port 5432 tests/**/*.sql
+          command: pg_prove --host $PGHOST --dbname $POSTGRES_DB --username $PGUSER --port 5432 tests/**/*.sql
 
       - store_artifacts:
           path: /tmp/test-results
